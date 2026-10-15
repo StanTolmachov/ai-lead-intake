@@ -1,0 +1,71 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>Flow</title>
+<style>
+  :root { --bg:#F5F3EE; --ink:#15171B; --muted:#5B6068; --line:#B9B4A8; --soft:#DAD6CC; --accent:#0E6B4E; --accentbg:#DCEFE7; --hot:#C2321F; --hotbg:#FBE3DE; --warn:#9A5B00; --warnbg:#FCEFD2; }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  body { width:1600px; height:1200px; background:var(--bg); font-family:Inter, sans-serif; color:var(--ink); position:relative; overflow:hidden; }
+  h2 { position:absolute; left:96px; top:72px; font-family:"Inter Display"; font-size:56px; letter-spacing:-.03em; }
+  .lede { position:absolute; left:96px; top:148px; font-size:24px; color:var(--muted); }
+  .n { position:absolute; background:#fff; border:1.5px solid var(--soft); border-radius:18px; padding:20px 24px; width:300px; }
+  .n small { display:block; font-size:15px; letter-spacing:.12em; text-transform:uppercase; color:var(--muted); margin-bottom:6px; font-weight:600; }
+  .n b { font-size:24px; font-weight:600; display:block; }
+  .n p { font-size:18px; color:var(--muted); margin-top:6px; line-height:1.35; }
+  .n.ai { background:var(--accent); border-color:var(--accent); color:#fff; } .n.ai small, .n.ai p { color:#CDEBDF; }
+  .n.dark { background:var(--ink); border-color:var(--ink); color:#fff; } .n.dark small, .n.dark p { color:#A4AAB3; }
+  .n.hot { background:var(--hotbg); border-color:#F0B9AE; } .n.hot small { color:var(--hot); }
+  .n.err { background:var(--warnbg); border-color:#EBCB8B; } .n.err small { color:var(--warn); }
+  svg { position:absolute; inset:0; }
+  .tag { position:absolute; font-size:17px; color:var(--muted); background:var(--bg); padding:2px 8px; font-weight:500; }
+  .legend { position:absolute; left:96px; bottom:64px; display:flex; gap:40px; font-size:20px; color:var(--muted); }
+  .legend i { display:inline-block; width:16px; height:16px; border-radius:4px; margin-right:10px; vertical-align:-2px; }
+</style></head>
+<body>
+<h2>How it works</h2>
+<div class="lede">Lead is saved before the AI call, so nothing is lost if the API fails.</div>
+
+<svg width="1600" height="1200" viewBox="0 0 1600 1200">
+  <defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#8C877B"/></marker></defs>
+  <g fill="none" stroke="#8C877B" stroke-width="2.5">
+    <!-- inputs → validate -->
+    <path d="M396 312 C 440 312, 440 400, 476 400" marker-end="url(#a)"/>
+    <path d="M396 500 C 440 500, 440 410, 476 410" marker-end="url(#a)"/>
+    <!-- validate → save -->
+    <path d="M776 405 L 876 405" marker-end="url(#a)"/>
+    <!-- save → gemini (down) -->
+    <path d="M1026 470 L 1026 560" marker-end="url(#a)"/>
+    <!-- gemini → validate output (left) -->
+    <path d="M876 625 L 776 625" marker-end="url(#a)"/>
+    <!-- gemini → error -->
+    <path d="M1176 625 L 1236 625" marker-end="url(#a)" stroke-dasharray="7 6"/>
+    <!-- validate output → update row (down) -->
+    <path d="M626 690 L 626 780" marker-end="url(#a)"/>
+    <!-- update → outputs -->
+    <path d="M476 860 C 260 860, 246 900, 246 958" marker-end="url(#a)"/>
+    <path d="M700 905 L 700 958" marker-end="url(#a)"/>
+    <path d="M776 860 C 1100 860, 1150 920, 1150 958" marker-end="url(#a)"/>
+    <!-- error retry loop -->
+    <path d="M1386 560 C 1386 440, 1240 400, 1180 400" marker-end="url(#a)" stroke-dasharray="7 6"/>
+  </g>
+</svg>
+
+<div class="n" style="left:96px; top:250px"><small>Input A</small><b>Google Form</b><p>Installable onFormSubmit trigger</p></div>
+<div class="n" style="left:96px; top:440px"><small>Input B</small><b>Website webhook</b><p>doPost · Webflow, Zapier, Make · token auth</p></div>
+
+<div class="n" style="left:476px; top:340px"><small>Guard</small><b>Validate &amp; dedupe</b><p>Email check · SHA-256 of email + message</p></div>
+<div class="n dark" style="left:876px; top:340px"><small>Sheets CRM</small><b>Save row · NEW</b><p>LockService · formula-injection safe</p></div>
+
+<div class="n ai" style="left:876px; top:560px"><small>AI</small><b>Gemini → strict JSON</b><p>Category · score · budget · timeline · reply</p></div>
+<div class="n" style="left:476px; top:560px"><small>Guard</small><b>Validate AI output</b><p>Enum check · clamp 0–100 · priority set in code</p></div>
+<div class="n err" style="left:1236px; top:560px; width:270px"><small>On failure</small><b>Status · ERROR</b><p>Backoff on 429/5xx · retryFailed()</p></div>
+
+<div class="n dark" style="left:476px; top:780px"><small>Sheets CRM</small><b>Update row · DONE</b><p>Colour-coded hot / warm / cold / spam</p></div>
+
+<div class="n" style="left:96px; top:960px"><small>Every lead (not spam)</small><b>Gmail reply draft</b><p>In the lead's language · human sends</p></div>
+<div class="n hot" style="left:550px; top:960px"><small>Score ≥ 70</small><b>Slack alert</b><p>Summary, budget, what to ask</p></div>
+<div class="n" style="left:1000px; top:960px"><small>Daily 08:00</small><b>Email digest</b><p>Counts + ranked top leads</p></div>
+
+<span class="tag" style="left:1180px; top:596px">fails</span>
+<span class="tag" style="left:1300px; top:420px">retry</span>
+
+<div class="legend" style="left:auto; right:96px"><span><i style="background:#0E6B4E"></i>AI step</span><span><i style="background:#15171B"></i>Storage</span><span><i style="background:#F0B9AE"></i>Alert</span></div>
+</body></html>

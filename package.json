@@ -1,0 +1,8 @@
+{
+  "name": "ai-lead-intake",
+  "version": "1.0.0",
+  "private": true,
+  "description": "AI lead qualification on Google Apps Script: Forms/webhook → Gemini → Sheets CRM → Gmail drafts + Slack alerts",
+  "scripts": { "test": "node test/run-tests.js" },
+  "license": "MIT"
+}
